@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import useUserStore from "./modules/userTable/store";
 
 function App() {
+  const users = useUserStore((state) => state.users);
+  const addUser = useUserStore((state) => state.addUser);
+  const fetchUsers = useUserStore((state) => state.fetchUsers);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  const onBtnClick = () => {
+    addUser("newUser");
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {users.map((user) => (
+        <div key={user.id}>
+          {user.id}.{user.username}
+        </div>
+      ))}
+      <button onClick={onBtnClick}>Create</button>
     </div>
   );
 }
